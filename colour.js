@@ -34,14 +34,25 @@ class ColourMap {
     // Returns a new Colour obejct with these values.
     getColour(pos) {
         
+        // If the map is empty just return 0.
+        if (this.colours.size() == 0) {
+            return 0;
+        }
+
         // If the position is already a key we don't need to interpolate.
         if (pos in this.colours) {
             return this.colours[pos];
         }
 
         var keys =[ ...this.colours.keys() ];
-        var x = keys[0];
-        var y = keys[1];
+
+        // If the map only contains one colour return that colour.
+        if (keys.length == 1) {
+            return this.colours.get(keys[0]);
+        }
+
+        var x = keys[0]; // Largest key less than pos.
+        var y = keys[keys.length - 1]; // Smallest key greater than pos.
 
         keys.forEach(key => {
             if (key < x) {

@@ -7,7 +7,7 @@ class Colour {
     }
 
     toString() {
-        return ("#" + this.r.toString(16) + this.g.toString(16) + this.b.toString(16)).toUpperCase();
+        return ("#" + Math.floor(this.r).toString(16) + Math.floor(this.g).toString(16) + Math.floor(this.b).toString(16)).toUpperCase();
     }
 
     static parse(hexString) {
@@ -39,9 +39,17 @@ class ColourMap {
             return this.colours[pos];
         }
 
-        keys = Object.keys(this.colours);
-        x = Math.min(keys); // Largest key smaller than pos.
-        y = Math.max(keys); // Smallest key larger than pos.
+        var keys =[ ...this.colours.keys() ];
+        var x = keys[0];
+        var y = keys[1];
+
+        keys.forEach(key => {
+            if (key < x) {
+                x = key;
+            } else if (key > y) {
+                y = key;
+            }
+        });
 
         keys.forEach(key => {
             if (key < pos && key > x) {
@@ -52,16 +60,16 @@ class ColourMap {
             }
         });
 
-        xColour = this.colours.get(x);
-        yColour = this.colours.get(y);
+        var xColour = this.colours.get(x);
+        var yColour = this.colours.get(y);
 
-        rGradient = (yColour.r - xColour.r) / (x - y);
-        gGradient = (yColour.g - xColour.g) / (x - y);
-        bGradient = (yColour.b - xColour.b) / (x - y);
+        var rGradient = (yColour.r - xColour.r) / (y - x);
+        var gGradient = (yColour.g - xColour.g) / (y - x);
+        var bGradient = (yColour.b - xColour.b) / (y - x);
 
-        rNew = xColour.r + rGradient * (pos - x);
-        gNew = xColour.g + gGradient * (pos - x);
-        bNew = xColour.b + bGradient * (pos - x);
+        var rNew = xColour.r + rGradient * (pos - x);
+        var gNew = xColour.g + gGradient * (pos - x);
+        var bNew = xColour.b + bGradient * (pos - x);
 
         return new Colour(rNew,gNew,bNew);
 

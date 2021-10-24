@@ -7,11 +7,15 @@ class Colour {
     }
 
     toString() {
-
+        return ("#" + this.r.toString(16) + this.g.toString(16) + this.b.toString(16)).toUpperCase();
     }
 
-    static parse(hex) {
-
+    static parse(hexString) {
+        return new Colour(
+            parseInt(hexString.substring(1,3),16),
+            parseInt(hexString.substring(3,5),16),
+            parseInt(hexString.substring(5,7),16)
+        );
     }
 
 }
